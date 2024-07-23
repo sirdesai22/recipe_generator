@@ -15,10 +15,10 @@ const LandingPage = () => {
     textShadow: '0px 0px 15px black',
   };
   return (
-    <div style={{ background: 'url(/foodbg.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }} className='h-screen w-full flex flex-col justify-center items-center bg-no-repeat gap-5'>
+    <div style={{ background: 'url(/food_bg.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }} className='h-screen w-full flex flex-col justify-center items-center bg-no-repeat gap-5'>
       <h1 style={textStyle} className='text-9xl font-extrabold text-white'>Meal Master</h1>
-      <p className='text-4xl font-bold text-white' style={textStyle2}>Your goto health companion!</p>
-      <button onClick={redirectToChat} className='bg-green-500 px-4 py-2 rounded-full text-white font-semibold text-2xl hover:bg-green-600 shadow-lg border-4 border-green-600'>Get started</button>
+      <p className='text-4xl font-bold text-green-600' /*style={textStyle2}*/ >Your goto health companion!</p>
+      <button onClick={redirectToChat} className='bg-green-500 px-4 py-2 rounded-full text-white font-semibold text-2xl hover:bg-green-600 shadow-lg'>Get started</button>
     </div>
   )
 }

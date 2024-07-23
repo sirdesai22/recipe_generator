@@ -13,3 +13,35 @@
         scrollbar-width: none;  /* Firefox */
   }
 }
+
+.text-shadow{
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.541);
+}
+
+.generatorClass h1 {
+    @apply text-4xl font-bold mb-4;
+  }
+  
+  .generatorClass h2 {
+    @apply text-3xl font-bold mb-3;
+  }
+  
+  .generatorClass h3 {
+    @apply text-2xl font-bold mb-2;
+  }
+  
+  .generatorClass p {
+    @apply text-base mb-4;
+  }
+  
+  .generatorClass ul {
+    @apply list-disc list-inside mb-4;
+  }
+  
+  .generatorClass ol {
+    @apply list-decimal list-inside mb-4;
+  }
+  
+  .generatorClass li {
+    @apply mb-1;
+  }

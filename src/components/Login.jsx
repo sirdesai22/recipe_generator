@@ -1,4 +1,6 @@
+import { signInWithPopup } from 'firebase/auth';
 import React, { useEffect, useState } from 'react'
+import { auth, googleProvider } from '../config/firebase-config';
 
 const Login = () => {
     const [index, setIndex] = useState();
@@ -19,15 +21,25 @@ const Login = () => {
         return () => clearInterval(timeoutId); // Clear interval if the component unmounts or updates
     }, []);
 
+    const handleLogin = async() => {
+        try {
+            await signInWithPopup(auth, googleProvider)
+            window.location.href = "/chat"
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
   return (
-    <div className='flex flex-col justify-center items-center gap-5 h-screen bg-[#222222] text-white'>
+    <div className='flex flex-col justify-center items-center gap-5 h-screen bg-gradient-to-br from-green-400 to-emerald-600 text-white'>
         <div className='text-8xl flex justify-evenly w-full'>
-            <span>{food.a[index]}</span>
-            <span>{food.b[index]}</span>
-            <span>{food.c[index]}</span>
+            <span className='text-shadow'>{food.a[index]}</span>
+            <span className='text-shadow'>{food.b[index]}</span>
+            <span className='text-shadow'>{food.c[index]}</span>
         </div>
         <h1 className='text-8xl font-bold'>Your perfect recipe in seconds.</h1>
         <button
+        onClick={handleLogin}
           className="mt-8 text-gray-900 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg px-5 py-2.5 text-center text-xl inline-flex items-center dark:focus:ring-gray-500 me-2 mb-2"
         >
           <svg

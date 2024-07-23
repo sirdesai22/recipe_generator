@@ -1,29 +1,88 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { auth, db } from '../config/firebase-config'
+import { addDoc, collection } from 'firebase/firestore';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Generator = () => {
+const Generator = ({ result }) => {
+
+  const [htmlContent, setHtmlContent] = useState(result);
+
+  useEffect(() => {
+    setHtmlContent(result);
+  }, [result])
+
+
+  const [user, setUser] = useState(false);
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      // User is logged in
+      console.log(auth.currentUser.email)
+      setUser(true);
+    } else {
+      // User is not logged in
+      setUser(false);
+    }
+  });
+
+  const recipeCollectionRef = collection(db, "recipes");
+  const handleSaveRecipe = async() => {
+    if (!user)
+      window.location.href = '/login';
+    else {
+      //Save doc to DB
+      try {
+        await addDoc(recipeCollectionRef, {
+          email: auth?.currentUser?.email,
+          content: result,
+        });
+        toast.success('Recipe saved!')
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  const viewSaved = () => {
+    window.location.href = `/saved`;
+  }
+
+  const renderHTML = () => {
+    return { __html: result };
+  };
+
+
   return (
-    <div className='flex gap-5 flex-col border-4 w-[50%] h-full border-black bg-slate-300 rounded-md px-5 py-2 overflow-y-scroll no-scrollbar text-xl'>
+    <div className='flex gap-5 flex-col border-4 w-[50%] h-full border-black bg-blue-100 rounded-md px-5 py-2 overflow-y-scroll no-scrollbar text-xl'>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="light"
+        transition:Bounce
+      />
       <div className='flex justify-between items-center'>
-        <button className='bg-blue-500 text-white px-4 py-2 rounded-lg text-sm shadow-md font-semibold'>View saved</button>
-        <button className='bg-green-500 text-white px-4 py-2 rounded-lg text-sm shadow-md font-semibold'>Save Recipie</button>
+
+        {user
+          ? (<button
+            className={`bg-blue-500 text-white px-4 py-2 rounded-lg text-sm shadow-md font-semibold`}
+            onClick={viewSaved}>View saved</button>)
+          :
+          (<button
+            className={`bg-red-500 text-white px-4 py-2 rounded-lg text-sm shadow-md font-semibold`}
+            onClick={handleSaveRecipe}>Login</button>)
+        }
+        <button
+          onClick={handleSaveRecipe} className='bg-green-500 text-white px-4 py-2 rounded-lg text-sm shadow-md font-semibold'>Save Recipe</button>
       </div>
 
-      <h1 className='text-4xl font-bold'>Recipie Name</h1>
-      <p><span className='font-semibold'>Description: </span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, perspiciatis est eaque necessitatibus voluptatem quas iste sapiente reprehenderit aut quasi quo rerum? Neque, voluptate possimus?</p>
-      <p className='font-semibold text-2xl'>Ingredients:</p>
-      <ul>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-        <li>Ingredient X</li>
-      </ul>
-      <p><span className='font-semibold'>Instructions: </span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae eaque, quas unde eveniet, repudiandae veritatis nemo temporibus accusantium ducimus omnis excepturi perferendis cum similique expedita, consectetur dignissimos animi nisi ipsam fugit alias in! Dolore maxime deleniti optio architecto magni esse nam similique, natus fuga fugit dolorum placeat earum odit dignissimos.</p>
+      <div className='text-wrap generatorClass' dangerouslySetInnerHTML={{ __html: htmlContent }} />
     </div>
   )
 }
