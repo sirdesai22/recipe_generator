@@ -6,7 +6,6 @@ import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  // apiKey: "AIzaSyA04dTCuKAibltxcQLmpFP8yosb1F29zM4",
   authDomain: "recipe-generator-abe4c.firebaseapp.com",
   projectId: "recipe-generator-abe4c",
   storageBucket: "recipe-generator-abe4c.appspot.com",
